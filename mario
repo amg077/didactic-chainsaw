@@ -63,9 +63,7 @@ and open the template in the editor.
              document.write(mario.length);
              document.write(mario[0].length);    
              document.write(canvas.width);
-             document.write(canvas.height);         
-            
-              
+             document.write(canvas.height);  
               
               drawPixels(mario);
     
@@ -73,11 +71,23 @@ and open the template in the editor.
             function drawPixels(drawing) {
               var canvas= document.getElementById("canvas");
               var ctx = canvas.getContext("2d");  
-              var pixelSizeX=canvas.width/drawing[0].length;
+              var pixelSizeX=canvas.height/drawing.length;
               var pixelSizeY=canvas.height/drawing.length;
-                      
               
-                
+
+
+                for (y = 0; y < drawing.length; y++){
+                    for(x = 0; x < drawing[y].length; x++){  
+                      var actualizacion=0;
+                    }
+                      actualizacion+=drawing[y].length;
+                  }
+                      var anchoDibujo = pixelSizeX*actualizacion;
+
+                      var diferencia =(canvas.width-anchoDibujo)/2;
+          
+                      document.write(diferencia);      
+              
                 for (y = 0; y < drawing.length; y++){
                     for(x = 0; x < drawing[y].length; x++){       
                         var color;
@@ -117,15 +127,24 @@ and open the template in the editor.
                       
                         ctx.fillStyle = color;   
                         ctx.fillRect(
-                            x * pixelSizeX, 
+                            diferencia+(pixelSizeX*x), 
                             y * pixelSizeY, 
                             pixelSizeX, 
                             pixelSizeY
                         );
+                        
                     }
+                    
                 }
-                
+                 
+              
         }
 
         </script>   
     </body>
+</html>
+   
+   
+              
+                
+          
