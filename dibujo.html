@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>It's me! Mario!</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <style>
+
+        body{
+            background-color: white;
+        }
+
+       #canvas{
+            width:50%; 
+            height:50%;
+            margin: 0 auto;
+            position: absolute;
+            top: -25%; 
+            left: -25%; 
+            border: 1 px solid red;
+              -webkit-transition: width 3s, height 3s,  -webkit-transform 3s;
+            transition: width 3s, height 3s,  transform 3s;                
+} 
+        #canvas:hover{
+            width:70%;
+            height:70%;
+             -webkit-transform: rotate(360deg);
+            transform:rotate(360deg);
+
+      }       
+
+        #centrar{
+           position:absolute;
+           width:50%;
+           height:50%;
+           top:50%; 
+           left:50%;
+
+        }
+        
+        </style>
+    </head>
+    <body>
+        <form>
+            <select  id="personaje">
+                <option value="mario">Mario</option>
+                <option value="linkk">Linkk</option>
+                <option value="pacman">Pacman</option>
+            </select>    
+        </form>    
+
+        <p id="resultado">fsda</p>
+           
+        <div id="centrar" >
+            <canvas id="canvas"/>
+         </div>    
+        <script>
+
+        function detectaDibujo(){// Esta es la funcion que guarda el valor dependiendo del dibujo que selecciones
+
+            var capturaDibujo = $( "#personaje" ).val();
+             document.getElementById("resultado").innerHTML=capturaDibujo;
+            $( "select" ).change(capturaDibujo);
+
+        }
+
+        //Habia planteado guardar en 3 arreglos cada uno de los dibujos
+            var mario = [ ["-","-","-","-","-","rd","rd","rd","rd","rd","rd","-","-","pk","pk","pk","-"],//1
+                          ["-","-","-","-","rd","rd","rd","rd","rd","rd","rd","rd","rd","rd","pk","pk","-"],//2
+                          ["-","-","-","-","br","br","br","pk","pk","pk","bk","pk","-","rd","rd","rd","-"],//3
+                          ["-","-","-","br","pk","br","pk","pk","pk","pk","bk","pk","pk","pk","rd","rd","-"],//4
+                          ["-","-","-","br","pk","br","br","pk","pk","pk","pk","bk","pk","pk","pk","rd","-"],//5
+                          ["-","-","-","br","br","pk","pk","pk","pk","pk","bk","bk","bk","bk","rd","-","-"],//6
+                          ["-","-","-","-","-","pk","pk","pk","pk","pk","pk","pk","pk","rd","rd","-","-"],//7
+                          ["-","-","rd","rd","rd","rd","rd","bl","rd","rd","rd","bl","rd","rd","-","-","br",],//8
+                          ["pk","pk","rd","rd","rd","rd","rd","rd","bl","rd","rd","rd","bl","-","-","br","br"],//9
+                          ["pk","pk","pk","rd","rd","rd","rd","rd","bl","bl","bl","bl","yl","bl","bl","br","br"],///10
+                          ["-","-","-","-","bl","rd","bl","bl","bl","yl","bl","bl","bl","bl","bl","br","br",],//11
+                          ["-","-","br","br","br","bl","bl","bl","bl","bl","bl","bl","bl","bl","bl","br","br",],//12
+                          ["-","br","br","br","bl","bl","bl","bl","bl","bl","bl","-","-","-","-","-","-"],//13
+                          ["-","br","br","-","-","-","-","-","-","-","-","-","-","-","-","-","-"],//14
+                          ["-","br","br","-","-","-","-","-","-","-","-","-","-","-","-","-","-"]];//15
+
+            var pacman = [
+                         ["-","-","-","-","-","-","-","-","-","bk","bk","bk","bk","-","-","-","-","-","-","-"],//1
+                         ["-","-","-","-","-","-","bk","bk","bk","yl","yl","yl","yl","bk","bk","bk","-","-","-","-"],//2
+                         ["-","-","-","-","bk","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-"],//3
+                         ["-","-","-","bk","yl","yl","yl","yl","yl","yl","bk","bk","bk","yl","yl","yl","yl","yl","bk","-"],//4
+                         ["-","-","bk","yl","yl","yl","yl","yl","yl","yl","bk","bk","bk","yl","yl","yl","yl","yl","yl","bk"], //5
+                         ["-","-","bk","yl","yl","yl","yl","yl","yl","yl","bk","bk","bk","yl","yl","yl","yl","bk","bk","bk"], //6
+                         ["-","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-"], //7
+                         ["-","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-","-","-"], //8
+                         ["-","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-","-","-","-","-"], //9
+                         ["bk","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-","-","-","-","-","-","-"], //10
+                         ["bk","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-","-","-","-","-","-","-","-","-"], //11
+                         ["bk","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-","-","-","-","-","-","-","-","-"], //12
+                         ["bk","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-","-","-","-","-","-","-"], //13
+                         ["-","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-","-","-","-","-"], //14
+                         ["-","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-","-","-"], //15
+                         ["-","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-","-"], //16
+                         ["-","-","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","bk"], //17
+                         ["-","-","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk"], //18
+                         ["-","-","-","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","-"], //19
+                         ["-","-","-","-","bk","bk","yl","yl","yl","yl","yl","yl","yl","yl","yl","yl","bk","bk","-","-"], //20
+                         ["-","-","-","-","-","-","bk","bk","bk","yl","yl","yl","yl","bk","bk","bk","-","-","-","-"], //21
+                         ["-","-","-","-","-","-","-","-","bk","bk","bk","bk","bk","-","-","-","-","-","-","-"] //22
+                        ];
+
+           var linkk= [ ["-","-","-","-","gr","gr","gr","gr","gr","gr","-","-","-"],//1
+                          ["-","-","-","gr","gr","gr","gr","gr","gr","gr","gr","-","-"],//2
+                          ["-","pk","-","gr","br","br","br","br","br","br","gr","-","pk"],//3
+                          ["-","pk","-","br","br","br","br","br","br","br","br","-","pk"],//4
+                          ["-","pk","pk","br","pk","gr","pk","pk","gr","pk","br","pk","pk"],//5
+                          ["-","pk","pk","br","pk","br","pk","pk","br","pk","br","pk","pk"],//6
+                          ["-","pk","pk","pk","pk","pk","pk","pk","pk","pk","pk","pk","br"],//7
+                          ["-","-","-","gr","pk","pk","br","br","pk","pk","gr","br","br"],//8
+                          ["-","br","br","br","br","br","pk","pk","pk","gr","gr","gr","pk"],//9
+                          ["br","br","pk","br","br","br","br","gr","gr","gr","gr","gr","pk"],///10
+                          ["br","pk","pk","pk","br","br","pk","br","br","gr","gr","br","-"],//11
+                          ["br","br","pk","br","br","br","pk","gr","br","br","br","gr","-"],//12
+                          ["br","br","pk","br","br","br","pk","br","br","gr","gr","gr","-"],//13
+                          ["br","br","br","br","br","br","pk","gr","gr","gr","br","-","-"],//14
+                          ["br","pk","pk","pk","pk","pk","-","-","br","br","br","-","-"],//15
+                          ["-","-","-","-","-","-","-","-","br","br","br","-","-"],//16
+                          ];
+            
+
+             document.write(mario.length);
+             document.write(mario[0].length);    
+             document.write(canvas.width);
+             document.write(canvas.height);  
+
+             /*
+            lo que trade de  hacer es algo asi:
+    
+            if(capturaDibujo=="mario"){
+
+            // aqui poner el arreglo de mario
+            }
+
+            else{
+                if(capturaDibujo=="link"){
+                //aqui poner el arrego de link
+                }
+        
+                else{
+    
+                capturaDibujo=="pacman";
+                }
+
+            }
+
+           
+
+            La cosa es que no pude hacerlo funcionar ni con dos fuciones por separado, ni con una sola funcion
+             */
+
+
+              
+              drawPixels(mario);// DrawPixels tendria que reciibir capturaDibujo 
+    
+            
+            function drawPixels(drawing) {//en esta funcion es donde necesitariamos el valor de la variable capturaDibujo, pero ese valor esta en la otra funcion, trate de meterlo aqui pero me marcaba error.
+              var canvas= document.getElementById("canvas");
+              var ctx = canvas.getContext("2d");  
+              var pixelSizeX=canvas.height/drawing.length;
+              var pixelSizeY=canvas.height/drawing.length;
+              
+
+
+                for (y = 0; y < drawing.length; y++){
+                    for(x = 0; x < drawing[y].length; x++){  
+                      var actualizacion=0;
+                    }
+                      actualizacion+=drawing[y].length;
+                  }
+                      var anchoDibujo = pixelSizeX*actualizacion;
+
+                      var diferencia =(canvas.width-anchoDibujo)/2;
+          
+                      document.write(diferencia);      
+              
+                for (y = 0; y < drawing.length; y++){
+                    for(x = 0; x < drawing[y].length; x++){       
+                        var color;
+                        switch (drawing[y][x]) {
+                            case "rd":
+                                color = "red";    
+                            break;
+
+                            case "bl":
+                                color = "blue";
+                            break;
+
+                            case "br":
+                                color = "brown"; 
+                            break;
+
+                            case "yl":
+                                color = "yellow";
+                            break;  
+
+                            case "pk":
+                                color = "pink";
+                            break;    
+
+                            case "-":
+                                color = "white";
+                            break;
+
+                            case "bk":
+                                color = "black";
+                            break;
+
+                            default:
+                                color = "purple";
+
+                        }
+                      
+                        ctx.fillStyle = color;   
+                        ctx.fillRect(
+                            diferencia+(pixelSizeX*x), 
+                            y * pixelSizeY, 
+                            pixelSizeX, 
+                            pixelSizeY
+                        );
+                        
+                    }
+                    
+                }
+                 
+              
+        }
+
+           
+            
+
+
+
+                             
+
+        </script>   
+    </body>
